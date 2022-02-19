@@ -1,22 +1,58 @@
+const { chromium } = require("playwright");
+const { mail, pass } = require("../user");
 const { test, expect } = require("@playwright/test");
 
-test("test", async ({ page }) => {
-  // Go to https://netology.ru/free/management#/
-  await page.goto("https://netology.ru/free/management#/");
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
-  // Click a
-  await page.click("a");
-  await expect(page).toHaveURL("https://netology.ru/");
+(async () => {
+  const browser = await chromium.launch({
+    headless: false,
+    slowMo: 5000,
+    // devtools: true,
+  });
+  const page = await browser.newPage();
 
-  // Click text=Учиться бесплатно
-  await page.click("text=Учиться бесплатно");
-  await expect(page).toHaveURL("https://netology.ru/free");
+  await page.goto("https://netology.ru");
 
-  page.click("text=Бизнес и управление");
+  await page.click("text=Войти");
 
-  // Click text=Как перенести своё дело в онлайн
-  await page.click("text=Как перенести своё дело в онлайн");
-  await expect(page).toHaveURL(
-    "https://netology.ru/programs/kak-perenesti-svoyo-delo-v-onlajn-bp"
-  );
-});
+  await page.fill('[placeholder="Email"]', mail);
+
+  await page.fill('[type="password"]', pass);
+
+  await page.click('button:has-text("Войти")');
+
+  await expect(page.locator("text=Мои курсы и профессии")).toBeVisible();
+
+  await browser.close();
+})();
+
+(async () => {
+  const browser = await chromium.launch({
+    headless: false,
+    slowMo: 5000,
+    // devtools: true,
+  });
+
+  const page = await browser.newPage();
+
+  await page.goto("https://netology.ru");
+
+  await page.click("text=Войти");
+
+  await page.fill('[placeholder="Пароль"]', "pass");
+
+  await page.fill('[placeholder="Email"]', "mail@mail.ru");
+
+  await page.click('button:has-text("Войти")');
+
+  await expect(
+    page.locator("text=Вы ввели неправильно логин или пароль")
+  ).toBeVisible();
+
+  await browser.close();
+})();

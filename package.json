@@ -4,12 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright"
+    "test": "npm test"
   },
-  "author": "",
+  "keywords": [
+    "playwright"
+  ],
+  "author": "ikalashnikov",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.12.3",
-    "playwright": "^1.12.3"
+    "eslint": "^8.1.0",
+    "expect-playwright": "^0.8.0",
+    "jest": "^27.3.1",
+    "jest-playwright-preset": "^1.7.0",
+    "playwright": "^1.16.3",
+    "prettier": "^2.4.1"
   }
 }
